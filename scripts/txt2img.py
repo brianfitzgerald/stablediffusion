@@ -40,7 +40,7 @@ def load_model_from_config(config, ckpt, verbose=False):
         print("unexpected keys:")
         print(u)
 
-    model.cuda()
+    model = model.to("mps")
     model.eval()
     return model
 
@@ -189,7 +189,7 @@ def main(opt):
     config = OmegaConf.load(f"{opt.config}")
     model = load_model_from_config(config, f"{opt.ckpt}")
 
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("mps")
     model = model.to(device)
 
     if opt.plms:
@@ -233,7 +233,7 @@ def main(opt):
 
     precision_scope = autocast if opt.precision == "autocast" else nullcontext
     with torch.no_grad(), \
-        precision_scope("cuda"), \
+        precision_scope("mps"), \
         model.ema_scope():
             all_samples = list()
             for n in trange(opt.n_iter, desc="Sampling"):

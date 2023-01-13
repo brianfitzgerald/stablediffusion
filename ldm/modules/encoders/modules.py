@@ -147,7 +147,9 @@ class FrozenOpenCLIPEmbedder(AbstractEncoder):
         model, _, _ = open_clip.create_model_and_transforms(arch, device=torch.device('cpu'), pretrained=version)
         del model.visual
         self.model = model
+        device = torch.device('mps')
 
+        print('clip encoder device', device)
         self.device = device
         self.max_length = max_length
         if freeze:

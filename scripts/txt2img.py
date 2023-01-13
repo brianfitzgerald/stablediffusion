@@ -231,7 +231,7 @@ def main(opt):
     if opt.fixed_code:
         start_code = torch.randn([opt.n_samples, opt.C, opt.H // opt.f, opt.W // opt.f], device=device)
 
-    precision_scope = autocast if opt.precision == "autocast" else nullcontext
+    precision_scope = nullcontext
     with torch.no_grad(), \
         precision_scope("mps"), \
         model.ema_scope():
